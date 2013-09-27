@@ -7,6 +7,7 @@ GO
 
 ALTER PROCEDURE [dbo].[SaveFile] 
 	@FileName VARCHAR(100),
+	@documentToDownloadId INT,
 	@fileContent varbinary(max),
 	@weeknumber INT
 AS
@@ -15,11 +16,13 @@ BEGIN
 
 	INSERT dbo.DownloadedDocument
 	        ( Filename ,
+			  DocumentToDownloadId,
 	          FileContent ,
 	          WeekNumber 
 	          )
 	VALUES  ( @FileName,
-	          @fileContent,
+	          @documentToDownloadId,
+			  @fileContent,
 	          @weeknumber 
 	        )
 END

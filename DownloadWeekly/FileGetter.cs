@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using DownloadWeekly.Dtos;
 using EbaySweden.Trading.DatabaseAccess;
 
 namespace DownloadWeekly
@@ -10,7 +12,7 @@ namespace DownloadWeekly
     {
         private IClock _clock;
         private readonly IDbAccessor _dbAccessor;
-        private const string BaseUrl = "http://arstadalsskolan.stockholm.se/sites/default/files/vecka_{0}_vinbar_f-3.pdf";
+        private const string BaseUrl = "";
 
         public FileGetter(IClock clock, IDbAccessor dbAccessor)
         {
@@ -20,24 +22,46 @@ namespace DownloadWeekly
 
         public string DownloadWeeklyLetter()
         {
+            var listOfDocsToDownload = GetDocsToDownload();
             var weekNumber = GetWeekNumber();
-            var filename = string.Format(BaseUrl, weekNumber);
-            if (IsFileAlreadyDownloaded(filename))
-                return "Already downloaded " + filename;
-
-            var file = DoDownload(filename);
-            if (file != null)
+            var counter = 0;
+            foreach (var doc in listOfDocsToDownload)
             {
-                SaveFile(filename, file, weekNumber);
+                var filename = string.Format(doc.BaseUrl, weekNumber);
+                if (IsFileAlreadyDownloaded(filename))
+                   continue;
+
+                var file = DoDownload(filename);
+                if (file != null)
+                {
+                    counter++;
+                    SaveFile(filename, file, weekNumber, doc.Id);
+                }
             }
-            return "Downloaded " + filename;
+
+            return "Downloaded " + counter;
         }
 
-        private void SaveFile(string filename, byte[] file, int weekNumber)
+        private IEnumerable<DocumentToDownload> GetDocsToDownload()
+        {
+            var reader = new ParametersAndReader<DocumentToDownload>
+            {
+                RecordReader = r => new DocumentToDownload
+                {
+                    Id = Convert.ToInt32(r["Id"]),
+                    Name= r["Name"].ToString(),
+                    BaseUrl = r["BaseUrl"].ToString(),
+                }
+            };
+            return _dbAccessor.PerformSpRead(reader, "[dbo].[GetDocsToDownload]");
+        }
+
+        private void SaveFile(string filename, byte[] file, int weekNumber, int documentId)
         {
             var parameters = new SqlParameterHandler(p =>
             {
                 p.AddWithValue("@filename", filename);
+                p.AddWithValue("@documentToDownloadId", documentId);
                 p.AddWithValue("@filecontent", file);
                 p.AddWithValue("@weeknumber", weekNumber);
             });

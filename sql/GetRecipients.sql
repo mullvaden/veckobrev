@@ -11,7 +11,7 @@ AS
 
 BEGIN
 
-	SELECT * FROM dbo.Subscriptions
+	SELECT * FROM dbo.Subscription
 
 
 END

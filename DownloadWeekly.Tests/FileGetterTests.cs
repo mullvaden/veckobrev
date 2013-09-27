@@ -26,7 +26,7 @@ namespace DownloadWeekly.Tests
         {
             // Arrange
             var clock = MockRepository.GenerateMock<IClock>();
-            clock.Stub(t => t.Now).Return(new DateTime(2013, 9, 19));
+            clock.Stub(t => t.Now).Return(new DateTime(2013, 9, 9));
             var getter = new FileGetter(clock, new DbAccessor(ConnectionString));
             // Act
             getter.DownloadWeeklyLetter();
