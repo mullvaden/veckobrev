@@ -20,15 +20,15 @@ namespace DownloadWeekly
             _portnumber = portnumber;
         }
 
-        public void SendMail()
+        public string SendMail()
         {
 
             var filesToSend = GetAttachmentsToSend();
             List<string> recipients = GetRecipients();
             if (filesToSend == null || filesToSend.Count == 0)
-                return;
+                return "No files to send.";
             if (recipients == null || recipients.Count == 0)
-                return;
+                return "No recients to send to.";
             var mail = new MailMessage();
             var smtpServer = new SmtpClient(_smtpServer);
             mail.From = new MailAddress("weekly@numlock.se");
@@ -43,6 +43,8 @@ namespace DownloadWeekly
             smtpServer.Port = _portnumber;
             smtpServer.Send(mail);
             SaveDocumentSent(filesToSend.Select(t => t.Id));
+
+            return string.Format(" Sent {0} file(s) to {1} recipients.", filesToSend.Count, recipients.Count);
         }
 
         private List<string> GetRecipients()

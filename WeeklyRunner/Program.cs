@@ -17,7 +17,7 @@ namespace WeeklyRunner
               Console.Write(new FileGetter(new Clock(), new DbAccessor(_connectionString)).DownloadWeeklyLetter());
 }
             else if (args[0].Equals("email", StringComparison.InvariantCultureIgnoreCase))
-                new MailSender(new DbAccessor(_connectionString), _smtp, _smtpPort).SendMail();
+                 Console.WriteLine(new MailSender(new DbAccessor(_connectionString), _smtp, _smtpPort).SendMail());
             else
             Console.WriteLine("Unknown arg!");
         }
