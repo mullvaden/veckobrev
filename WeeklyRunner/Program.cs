@@ -14,9 +14,7 @@ namespace WeeklyRunner
         static void Main(string[] args)
         {
             if (args[0].Equals("download", StringComparison.InvariantCultureIgnoreCase))
-            {
                 Console.Write(new FileGetter(new Clock(), new DbAccessor(_connectionString)).DownloadWeeklyLetter());
-            }
             else if (args[0].Equals("email", StringComparison.InvariantCultureIgnoreCase))
                 Console.WriteLine(new MailSender(new DbAccessor(_connectionString), _smtp, _smtpPort).SendMail());
             else if (args.Length > 0)

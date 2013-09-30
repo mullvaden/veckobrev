@@ -23,7 +23,6 @@ namespace DownloadWeekly
 
         public string SendMail()
         {
-
             var filesToSend = GetAttachmentsToSend();
             var recipients = GetRecipients();
             if (filesToSend == null || !filesToSend.Any())
@@ -37,8 +36,7 @@ namespace DownloadWeekly
                 var mail = new MailMessage();
                 mail.From = new MailAddress("veckobrev@numlock.se");
                 mail.Subject = "Veckobrev v." + fileToSend.WeekNumber;
-                var filename = Path.GetFileName(fileToSend.FileName);
-                mail.Attachments.Add(new Attachment(new MemoryStream(fileToSend.FileContent), filename));
+                mail.Attachments.Add(new Attachment(new MemoryStream(fileToSend.FileContent), Path.GetFileName(fileToSend.FileName)));
                 foreach (var recipient in recipients.Where(r => r.DocumentId == fileToSend.DocumentToDownloadId))
                     mail.To.Add(recipient.Email);
                 smtpServer.Send(mail);
@@ -83,14 +81,5 @@ namespace DownloadWeekly
         {
             _dbAccessor.PerformSpNonQuery("[dbo].[SaveFilesSent]", p => p.AddWithValues("@ids", downloadedDocumentIds));
         }
-    }
-
-    internal class FileToSend
-    {
-        public int Id { get; set; }
-        public int DocumentToDownloadId { get; set; }
-        public string FileName { get; set; }
-        public byte[] FileContent { get; set; }
-        public int WeekNumber { get; set; }
     }
 }

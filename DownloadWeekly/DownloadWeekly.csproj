@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Clock.cs" />
     <Compile Include="Dtos\DocumentToDownload.cs" />
+    <Compile Include="Dtos\FileToSend.cs" />
     <Compile Include="Dtos\Recipient.cs" />
     <Compile Include="FileGetter.cs" />
     <Compile Include="MailSender.cs" />
