@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Configuration;
+using System.Reflection;
+using Autofac;
 using DownloadWeekly;
+using DownloadWeekly.Dtos;
 using EbaySweden.Trading.DatabaseAccess;
 
 namespace WeeklyRunner
@@ -13,14 +16,26 @@ namespace WeeklyRunner
 
         static void Main(string[] args)
         {
+            var container = SetupIoC();
             if (args[0].Equals("download", StringComparison.InvariantCultureIgnoreCase))
-                Console.Write(new FileGetter(new Clock(), new DbAccessor(_connectionString)).DownloadWeeklyLetter());
+                container.Resolve<IFileGetter>().DownloadWeeklyLetter();
             else if (args[0].Equals("email", StringComparison.InvariantCultureIgnoreCase))
-                Console.WriteLine(new MailSender(new DbAccessor(_connectionString), _smtp, _smtpPort).SendMail());
+                Console.WriteLine(container.Resolve<IMailSender>().SendMail());
             else if (args.Length > 0)
                 Console.WriteLine("Unknown arg! {0}", args[0]);
             else
                 Console.WriteLine("Specify argument: \"email\" or \"download\" ");
+        }
+
+        private static IContainer SetupIoC()
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterAssemblyTypes(Assembly.Load("DownloadWeekly"))
+                .AsImplementedInterfaces();
+            builder.Register(c => new DbAccessor(_connectionString)).As<IDbAccessor>();
+            builder.Register(c => new MailSettings(_smtp, _smtpPort)).AsSelf();
+
+            return builder.Build();
         }
     }
 }

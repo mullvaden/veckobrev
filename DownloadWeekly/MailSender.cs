@@ -8,17 +8,15 @@ using EbaySweden.Trading.DatabaseAccess;
 
 namespace DownloadWeekly
 {
-    public class MailSender
+    public class MailSender : IMailSender
     {
         private IDbAccessor _dbAccessor;
-        private readonly string _smtpServer;
-        private readonly int _portnumber;
+        private SmtpClient _smtpServer;
 
-        public MailSender(IDbAccessor dbAccessor, string smtpServer, int portnumber)
+        public MailSender(IDbAccessor dbAccessor, MailSettings mailSettings)
         {
             _dbAccessor = dbAccessor;
-            _smtpServer = smtpServer;
-            _portnumber = portnumber;
+            _smtpServer = new SmtpClient(mailSettings.SmtpServer, mailSettings.SmtpPort);
         }
 
         public string SendMail()
@@ -28,18 +26,20 @@ namespace DownloadWeekly
             if (filesToSend == null || !filesToSend.Any())
                 return "No files to send.";
             if (recipients == null || !recipients.Any())
-                return "No recients to send to.";
+                return "No recipients to send to.";
 
-            var smtpServer = new SmtpClient(_smtpServer, _portnumber);
-            foreach (var fileToSend in filesToSend)
+            using (_smtpServer)
             {
-                var mail = new MailMessage();
-                mail.From = new MailAddress("veckobrev@numlock.se");
-                mail.Subject = "Veckobrev v." + fileToSend.WeekNumber;
-                mail.Attachments.Add(new Attachment(new MemoryStream(fileToSend.FileContent), Path.GetFileName(fileToSend.FileName)));
-                foreach (var recipient in recipients.Where(r => r.DocumentId == fileToSend.DocumentToDownloadId))
-                    mail.To.Add(recipient.Email);
-                smtpServer.Send(mail);
+                foreach (var fileToSend in filesToSend)
+                {
+                    var mail = new MailMessage();
+                    mail.From = new MailAddress("veckobrev@numlock.se");
+                    mail.Subject = "Veckobrev v." + fileToSend.WeekNumber;
+                    mail.Attachments.Add(new Attachment(new MemoryStream(fileToSend.FileContent), Path.GetFileName(fileToSend.FileName)));
+                    foreach (var recipient in recipients.Where(r => r.DocumentId == fileToSend.DocumentToDownloadId))
+                        mail.To.Add(recipient.Email);
+                    _smtpServer.Send(mail);
+                }
             }
 
             SaveDocumentSent(filesToSend.Select(t => t.Id));

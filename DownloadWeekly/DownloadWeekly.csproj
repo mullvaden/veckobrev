@@ -35,18 +35,17 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clock.cs" />
     <Compile Include="Dtos\DocumentToDownload.cs" />
     <Compile Include="Dtos\FileToSend.cs" />
+    <Compile Include="Dtos\MailSettings.cs" />
     <Compile Include="Dtos\Recipient.cs" />
     <Compile Include="FileGetter.cs" />
+    <Compile Include="IFileGetter.cs" />
+    <Compile Include="IMailSender.cs" />
     <Compile Include="MailSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

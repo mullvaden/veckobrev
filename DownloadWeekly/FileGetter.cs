@@ -8,7 +8,7 @@ using EbaySweden.Trading.DatabaseAccess;
 
 namespace DownloadWeekly
 {
-    public class FileGetter
+    public class FileGetter : IFileGetter
     {
         private IClock _clock;
         private readonly IDbAccessor _dbAccessor;
