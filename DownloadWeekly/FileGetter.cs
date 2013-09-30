@@ -12,7 +12,6 @@ namespace DownloadWeekly
     {
         private IClock _clock;
         private readonly IDbAccessor _dbAccessor;
-        private const string BaseUrl = "";
 
         public FileGetter(IClock clock, IDbAccessor dbAccessor)
         {

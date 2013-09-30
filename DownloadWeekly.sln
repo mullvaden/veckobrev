@@ -6,6 +6,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadWeekly.Tests", "DownloadWeekly.Tests\DownloadWeekly.Tests.csproj", "{28E90A01-E070-4D4C-8C0A-9256F5E2BC9A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{F5BBEA59-DFAC-48C8-89A0-3A0E1C65E29D}"
+	ProjectSection(SolutionItems) = preProject
+		sql\001DownloadedDocument.sql = sql\001DownloadedDocument.sql
+		sql\002Subscriptions.sql = sql\002Subscriptions.sql
+		sql\003DocumentToDownload.sql = sql\003DocumentToDownload.sql
+		sql\GetDocsToDownload.sql = sql\GetDocsToDownload.sql
+		sql\GetFilesToSend.sql = sql\GetFilesToSend.sql
+		sql\GetRecipients.sql = sql\GetRecipients.sql
+		sql\IsFileDownloaded.sql = sql\IsFileDownloaded.sql
+		sql\SaveFile.sql = sql\SaveFile.sql
+		sql\SaveFileSent.sql = sql\SaveFileSent.sql
+		sql\TableOfInts.sql = sql\TableOfInts.sql
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeeklyRunner", "WeeklyRunner\WeeklyRunner.csproj", "{92B3D5AF-7FD1-46B1-B8B5-A13AABCBB6B4}"
 EndProject

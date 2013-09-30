@@ -36,7 +36,7 @@ namespace DownloadWeekly
             {
                 var mail = new MailMessage();
                 mail.From = new MailAddress("veckobrev@numlock.se");
-                mail.Subject = "Veckobrev " + fileToSend.WeekNumber;
+                mail.Subject = "Veckobrev v." + fileToSend.WeekNumber;
                 var filename = Path.GetFileName(fileToSend.FileName);
                 mail.Attachments.Add(new Attachment(new MemoryStream(fileToSend.FileContent), filename));
                 foreach (var recipient in recipients.Where(r => r.DocumentId == fileToSend.DocumentToDownloadId))
