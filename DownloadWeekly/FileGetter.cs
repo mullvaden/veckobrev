@@ -22,17 +22,18 @@ namespace DownloadWeekly
         public string DownloadWeeklyLetter()
         {
             var listOfDocsToDownload = GetDocsToDownload();
-            var weekNumber = GetWeekNumber();
+            var weekNumberStart = GetWeekNumber();
             var counter = 0;
-            foreach (var doc in listOfDocsToDownload)
+            for (int weekNumber = weekNumberStart; weekNumber < weekNumberStart + 1; weekNumber++)
             {
-                var filename = string.Format(doc.BaseUrl, weekNumber);
-                if (IsFileAlreadyDownloaded(filename))
-                   continue;
-
-                var file = DoDownload(filename);
-                if (file != null)
+                foreach (var doc in listOfDocsToDownload)
                 {
+                    var filename = string.Format(doc.BaseUrl, weekNumber);
+                    if (IsFileAlreadyDownloaded(filename))
+                        continue;
+
+                    var file = DoDownload(filename);
+                    if (file == null) continue;
                     counter++;
                     SaveFile(filename, file, weekNumber, doc.Id);
                 }
@@ -48,7 +49,7 @@ namespace DownloadWeekly
                 RecordReader = r => new DocumentToDownload
                 {
                     Id = Convert.ToInt32(r["Id"]),
-                    Name= r["Name"].ToString(),
+                    Name = r["Name"].ToString(),
                     BaseUrl = r["BaseUrl"].ToString(),
                 }
             };

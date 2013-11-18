@@ -1,4 +1,5 @@
 ﻿using System.Net.Mail;
+using DownloadWeekly.Dtos;
 using EbaySweden.Trading.DatabaseAccess;
 using NUnit.Framework;
 
@@ -13,7 +14,7 @@ namespace DownloadWeekly.Tests
         public void SendMailTest()
         {
             // Arrange
-            var mailsender = new MailSender(new DbAccessor(ConnectionString), new SmtpClient("test07", 25));
+            var mailsender = new MailSender(new DbAccessor(ConnectionString), new MailSettings("test07", 25));
 
             // Act
             mailsender.SendMail();

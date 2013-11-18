@@ -38,6 +38,8 @@ namespace DownloadWeekly
                     mail.Attachments.Add(new Attachment(new MemoryStream(fileToSend.FileContent), Path.GetFileName(fileToSend.FileName)));
                     foreach (var recipient in recipients.Where(r => r.DocumentId == fileToSend.DocumentToDownloadId))
                         mail.To.Add(recipient.Email);
+                    if (mail.To.Count == 0)
+                        continue;
                     _smtpServer.Send(mail);
                 }
             }
