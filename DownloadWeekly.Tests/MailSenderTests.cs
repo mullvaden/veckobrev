@@ -8,7 +8,7 @@ namespace DownloadWeekly.Tests
     [TestFixture]
     public class MailSenderTests
     {
-        private const string ConnectionString = "Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=WeeklyDownloader;";
+        private const string ConnectionString = "Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=WeeklyDownloader;Data Source=localhost";
 
         [Test]
         public void SendMailTest()

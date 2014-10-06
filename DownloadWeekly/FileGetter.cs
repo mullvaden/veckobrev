@@ -24,7 +24,7 @@ namespace DownloadWeekly
             var listOfDocsToDownload = GetDocsToDownload();
             var weekNumberStart = GetWeekNumber();
             var counter = 0;
-            for (int weekNumber = weekNumberStart; weekNumber < weekNumberStart + 1; weekNumber++)
+            for (var weekNumber = weekNumberStart; weekNumber < weekNumberStart + 1; weekNumber++)
             {
                 foreach (var doc in listOfDocsToDownload)
                 {

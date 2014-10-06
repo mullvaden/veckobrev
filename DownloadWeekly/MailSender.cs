@@ -34,7 +34,7 @@ namespace DownloadWeekly
                 {
                     var mail = new MailMessage();
                     mail.From = new MailAddress("veckobrev@numlock.se");
-                    mail.Subject = "Veckobrev v." + fileToSend.WeekNumber;
+                    mail.Subject = string.Format("Veckobrev v.{0} {1}", fileToSend.WeekNumber, fileToSend.Name);
                     mail.Attachments.Add(new Attachment(new MemoryStream(fileToSend.FileContent), Path.GetFileName(fileToSend.FileName)));
                     foreach (var recipient in recipients.Where(r => r.DocumentId == fileToSend.DocumentToDownloadId))
                         mail.To.Add(recipient.Email);
@@ -70,6 +70,7 @@ namespace DownloadWeekly
                 RecordReader = r => new FileToSend
                 {
                     Id = Convert.ToInt32(r["Id"]),
+                    Name = r["Name"].ToString(), 
                     DocumentToDownloadId = Convert.ToInt32(r["DocumentToDownloadId"]),
                     FileName = r["FileName"].ToString(),
                     FileContent = (byte[])r["FileContent"],

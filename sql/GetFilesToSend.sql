@@ -11,7 +11,9 @@ AS
 
 BEGIN
 
-	SELECT * FROM dbo.DownloadedDocument WHERE Sent = 0
+	SELECT dd.*, dtd.Name FROM dbo.DownloadedDocument dd 
+	INNER JOIN dbo.DocumentToDownload dtd ON dtd.Id = dd.DocumentToDownloadId
+	WHERE Sent = 0
 
 
 END
