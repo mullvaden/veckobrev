@@ -10,7 +10,7 @@ namespace DownloadWeekly
 {
     public class FileGetter : IFileGetter
     {
-        private IClock _clock;
+        private readonly IClock _clock;
         private readonly IDbAccessor _dbAccessor;
 
         public FileGetter(IClock clock, IDbAccessor dbAccessor)
@@ -22,7 +22,7 @@ namespace DownloadWeekly
         public string DownloadWeeklyLetter()
         {
             var listOfDocsToDownload = GetDocsToDownload();
-            var weekNumberStart = GetWeekNumber();
+            var weekNumberStart = GetWeekNumberDaysFromNow(4);
             var counter = 0;
             for (var weekNumber = weekNumberStart; weekNumber < weekNumberStart + 1; weekNumber++)
             {
@@ -78,11 +78,11 @@ namespace DownloadWeekly
             return _dbAccessor.PerformSpReadSingle(reader, "IsFileDownloaded");
         }
 
-        private int GetWeekNumber()
+        private int GetWeekNumberDaysFromNow(int dayOffset)
         {
             var dfi = DateTimeFormatInfo.CurrentInfo;
             var cal = dfi.Calendar;
-            return cal.GetWeekOfYear(_clock.Now, dfi.CalendarWeekRule, dfi.FirstDayOfWeek);
+            return cal.GetWeekOfYear(_clock.Now.AddDays(dayOffset), dfi.CalendarWeekRule, dfi.FirstDayOfWeek);
         }
 
         private byte[] DoDownload(string url)
@@ -98,7 +98,7 @@ namespace DownloadWeekly
                 return bytes;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Url not valid
                 return null;
